@@ -1,7 +1,10 @@
 spring:
-  devtools:
-    livereload:
-      enabled: true
-
   freemarker:
     cache: false
+
+  redis:
+    host: localhost
+    port: 1337
+
+  profiles:
+    active: local
