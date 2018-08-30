@@ -20,6 +20,14 @@ var player = videojs('my-video', {
   }
 });
 
+player.on('ended', function() {
+  $.ajax({
+    type: 'POST',
+    url: '/api/completions',
+    data: {}
+  })
+});
+
 // // 플레이어에 키보드 핫 키 적용하기 - 볼륨, 재생 앞 뒤 이동
 // player.ready(function () {
 //   this.hotkeys({
