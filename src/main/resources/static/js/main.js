@@ -21,16 +21,16 @@ var player = videojs('my-video', {
 });
 
 // 재생 버튼 최초 클릭시에만 POST요청으로 재생수 증가
-let isPlayed = false;
-document.getElementById("vjs-big-play-centered").addEventListener("click", countUp);
+document.getElementsByClassName('vjs-big-play-button')[0].addEventListener(
+    'click', countUp);
+
 function countUp() {
-  if (!isPlayed) {
-    $.ajax({
-      type: 'POST',
-      url: '/api/playCountUp',
-      data: {}
-    })
-  }
+  alert("redis count up 요청!");
+  $.ajax({
+    type: 'POST',
+    url: '/api/playCountUp',
+    data: {idx: 1}
+  })
 }
 
 // 재생 종료시 AJAX로 POST 요청

@@ -14,6 +14,7 @@ public class MainController {
 
   @GetMapping("/")
   public String home(Model model) {
+    model.addAttribute("ContentPlayCount", mainService.findById(9999L));
     return "index";
   }
 }

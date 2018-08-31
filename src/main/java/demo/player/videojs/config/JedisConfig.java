@@ -1,38 +1,43 @@
 package demo.player.videojs.config;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-@Slf4j
+@RequiredArgsConstructor
 @Configuration
+@EnableRedisRepositories
+@EnableConfigurationProperties(AppProperty.class)
 public class JedisConfig {
 
-  @Value("${spring.redis.host}")
-  private String host;
-
-  @Value("${spring.redis.port}")
-  private int port;
-
-  @Value("${spring.redis.password}")
-  private String password;
+  private final AppProperty appProperty;
 
   @Bean
   public JedisConnectionFactory jedisConnectionFactory() {
-    JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-    jedisConnectionFactory.setHostName(host);
-    jedisConnectionFactory.setPort(port);
-    jedisConnectionFactory.setPassword(password);
+    RedisStandaloneConfiguration redisStandaloneConfiguration =
+        new RedisStandaloneConfiguration(
+            appProperty.getRedisConf().getHost(),
+            appProperty.getRedisConf().getPort()
+        );
 
-    return jedisConnectionFactory;
+    redisStandaloneConfiguration
+        .setPassword(RedisPassword.of(appProperty.getRedisConf().getPassword()));
+
+    return new JedisConnectionFactory(redisStandaloneConfiguration);
   }
 
   @Bean
-  public RedisTemplate<String, Object> redisTemplate() {
-    RedisTemplate<String, Object> template = new RedisTemplate<>();
+  public RedisTemplate<?, ?> redisTemplate() {
+    RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
+    template.setKeySerializer(new StringRedisSerializer());
+    template.setValueSerializer(new StringRedisSerializer());
     template.setConnectionFactory(jedisConnectionFactory());
     return template;
   }

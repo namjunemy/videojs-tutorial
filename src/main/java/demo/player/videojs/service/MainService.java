@@ -15,7 +15,14 @@ public class MainService {
   private final ContentPlayCountRedisRepository contentPlayCountRedisRepository;
 
   public ContentPlayCount findById(Long idx) {
-    return contentPlayCountRedisRepository.findById(idx)
+    ContentPlayCount contentPlayCount = contentPlayCountRedisRepository.findById(idx)
         .orElseThrow(ContentPlayCountNotFountException::new);
+    return contentPlayCount;
+  }
+
+  public void countUp(Long idx) {
+    ContentPlayCount contentPlayCount = findById(idx);
+    contentPlayCount.countUp();
+    contentPlayCountRedisRepository.save(contentPlayCount);
   }
 }

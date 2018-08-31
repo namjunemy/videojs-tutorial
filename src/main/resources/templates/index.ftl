@@ -23,6 +23,10 @@
   </p>
 </video>
 
+<p>인덱스 : ${ContentPlayCount.idx}</p>
+<p>컨텐츠 인덱스 : ${ContentPlayCount.contentIdx}</p>
+<p>재생수 : ${ContentPlayCount.count}</p>
+
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
