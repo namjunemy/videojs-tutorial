@@ -20,7 +20,21 @@ var player = videojs('my-video', {
   }
 });
 
-player.on('ended', function() {
+// 재생 버튼 최초 클릭시에만 POST요청으로 재생수 증가
+let isPlayed = false;
+document.getElementById("vjs-big-play-centered").addEventListener("click", countUp);
+function countUp() {
+  if (!isPlayed) {
+    $.ajax({
+      type: 'POST',
+      url: '/api/playCountUp',
+      data: {}
+    })
+  }
+}
+
+// 재생 종료시 AJAX로 POST 요청
+player.on('ended', function () {
   $.ajax({
     type: 'POST',
     url: '/api/completions',
